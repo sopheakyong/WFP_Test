@@ -8,8 +8,10 @@ class SessionsController < ApplicationController
 
     def create
         #debugger     
-        user = User.where(:user_name=>params[:session][:user_name].downcase)
-        if user && user.authenticate(params[:session][:password])
+        user = User.where(user_name:params[:session][:user_name])      
+        user=user.find_by_password(params[:session][:password])
+        # #if user && user.authenticate(params[:session][:password])
+        if user
           session[:user_id] = user.id
           redirect_to root_url, notice: "Logged in!"
         else
