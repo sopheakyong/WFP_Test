@@ -13,9 +13,11 @@ Rails.application.routes.draw do
   resources :students
   resources :users
   
+  #resources :reports, only: [:show]
   get 'reports/index'
-  get 'reports/performance_pdf'
-  get 'reports/performance_graph'
+  get 'reports/performance_pdf' , to: 'reports#performance_pdf'
+  get 'reports/pdf' , to: 'reports#show'
+  get 'reports/performance_graph' , to: 'reports#performance_graph'
   
 
   resources :sessions, only: [:new, :create, :destroy]
