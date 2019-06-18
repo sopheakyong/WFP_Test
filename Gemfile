@@ -58,3 +58,7 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 # Use ActiveModel has_secure_password
 gem 'bcrypt', '~> 3.1.7'
+
+#pdf
+gem 'prawn', '~> 1.2.1'
+gem 'prawn-table', '~> 0.1.0'
