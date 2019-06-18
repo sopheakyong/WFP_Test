@@ -1,0 +1,176 @@
+<!-- ============================================================== -->
+<!-- Left Sidebar - style you can find in sidebar.scss  -->
+<!-- ============================================================== -->
+
+<aside class="left-sidebar">
+    <!-- Sidebar scroll-->
+    <div class="scroll-sidebar">
+        <!-- User profile -->
+        <div class="user-profile">
+            <!-- User profile image -->
+            <div class="profile-img"> <img src="/assets/users/profile.png" alt="user" /> 
+                     <!-- this is blinking heartbit-->
+                    <div class="notify setpos"> <span class="heartbit"></span> <span class="point"></span> </div>
+            </div>
+            <!-- User profile text-->
+            <div class="profile-text"> 
+                    <h5>Admin</h5>
+                    <a href="#" class="dropdown-toggle u-dropdown" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true"><i class="mdi mdi-settings"></i></a>
+                     <a href="#" class="" data-toggle="tooltip" title="Email"><i class="mdi mdi-gmail"></i></a>
+                    <a href="pages-login.html" class="" data-toggle="tooltip" title="Logout"><i class="mdi mdi-power"></i></a>
+
+                <div class="dropdown-menu animated flipInY">
+              
+                </div>
+            </div>
+        </div>
+        <!-- End User profile text-->
+
+
+
+
+        <!-- Sidebar navigation-->
+        <nav class="sidebar-nav">
+            <ul id="sidebarnav">
+                 <li class="nav-devider"></li>
+                <li class="nav-small-cap">SCHOOL MANAGEMENT</li>
+                <li> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="mdi mdi-gauge"></i><span class="hide-menu">Dashboard </span></a>
+                    <ul aria-expanded="false" class="collapse">
+                        <li><a href="index.html">Minimal </a></li>
+                        <li><a href="index2.html">Analytical</a></li>
+                        <li><a href="index3.html">Demographical</a></li>
+                        <li><a href="index4.html">Modern</a></li>
+                    </ul>
+                </li>
+                <li <%=@caption_button_student=='ViewStudent'? 'class=active' : ''%> <%=@caption_button_student=='ViewPerformance'? 'class=active' : ''%> <%=@caption_button_student=='Update'? 'class=active' : ''%> <%=@caption_button_student_performance=='Update'? 'class=active' : ''%> > <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="mdi mdi-account-multiple"></i><span class="hide-menu">Students</span></a>
+                    <ul aria-expanded="false" class="collapse">
+                        <li>    
+                            <% if @caption_button_student=='ViewStudent' %>                     
+                                <%= link_to 'View Student', students_path, class:'active' %>
+                            <% else %>
+                                <%= link_to 'View Student', students_path %>
+                            <% end %>
+                        </li>
+
+                        <li>
+                        
+                            <% if @caption_button_student=='Update' %>
+                                 <%= link_to 'Update Student', new_student_path, class:'active' %>  
+                            <%else%>
+                                 <%= link_to 'Register Student', new_student_path %>     
+                            <%end%>
+                           
+                        </li>
+
+
+
+                        <li>
+                            <% if @caption_button_student=='ViewPerformance' %>  
+                                 <%= link_to 'View Performance', student_performances_path, class:'active' %>
+                            <% else %>
+                                <%= link_to 'View Performance', student_performances_path %>   
+                            <%end%>
+                        </li>
+                        <li>
+                            <% if @caption_button_student_performance=='Update' %>
+                                <%= link_to 'Update Performance', new_student_performance_path, class:'active' %>  
+                            <%else%>
+                                <%= link_to 'Add Performance', new_student_performance_path %>     
+                            <%end%>
+                               
+                        
+                        </li>
+
+                    </ul>
+                </li>
+                <li <%=@caption_button_school=='Update'? 'class=active' : ''%><%=@caption_button_student_school=='Update'? 'class=active' : ''%> > <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="mdi mdi-city"></i><span class="hide-menu">Schools</span></a>
+                    <ul aria-expanded="false" class="collapse">
+                        <li>
+                            <%= link_to 'View School', schools_path %>
+                        </li>
+
+                        <li>                        
+                            <% if @caption_button_school=='Update' %>
+                                    <%= link_to 'Update School', new_school_path, class:'active' %>  
+                            <%else%>
+                                    <%= link_to 'Add School', new_school_path %>     
+                            <%end%>
+                        
+                        </li>
+                        
+                        <li>                       
+                         
+                                <%= link_to 'View Student', student_schools_path %>
+   
+                        </li>
+                        <li>
+                        
+                        <% if @caption_button_student_school=='Update' %>
+                                <%= link_to 'Update Student', new_student_school_path, class:'active' %>  
+                        <%else%>   
+                                <%= link_to 'Add Student', new_student_school_path %>  
+                        <%end%>
+                             
+                        
+                        </li>
+
+                    </ul>
+                </li>
+                <li <%=@caption_button_report=='ReportPerformancePDF'? 'class=active' : ''%><%=@caption_button_report=='ReportPerformanceGraph'? 'class=active' : ''%>> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="mdi mdi-book-open"></i><span class="hide-menu">Reports</span></a>
+                    <ul aria-expanded="false" class="collapse">
+
+                        <li>
+                          
+                            <% if @caption_button_report=='ReportPerformancePDF' %>  
+                                <%= link_to 'Study Performance(PDF)', reports_performance_pdf_path, class:'active' %>
+                            <% else %>
+                                <%= link_to 'Study Performance(PDF)', reports_performance_pdf_path %>   
+                            <%end%>
+
+                        </li>
+                        <li>
+                            <% if @caption_button_report=='ReportPerformanceGraph' %>  
+                                <%= link_to 'Performance(Graph)', reports_performance_graph_path, class:'active' %>
+                            <% else %>
+                                <%= link_to 'Performance (Graph)', reports_performance_graph_path %>   
+                            <%end%>
+
+                        </li>
+
+                    </ul>
+                </li>
+
+
+                <li class="nav-small-cap">USER MANAGEMENT</li>
+                <li  <%=@caption_button_user=='Update'? 'class=active' : ''%>> <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><i class="mdi mdi-file"></i><span class="hide-menu">User Permission</span></a>
+                    <ul aria-expanded="false" class="collapse">
+                        <li>
+                        <%= link_to 'View User', users_path %>
+                        <li>
+                        <% if @caption_button_user=='Update' %>
+                            <%= link_to 'Update User', new_user_path, class:'active' %>  
+                        <%else%>   
+                                <%= link_to 'Create User', new_user_path %>  
+                        <%end%>
+                        </li>
+                        <li><a style="color:grey">Create Groups</a></li>                        
+                        <li><a style="color:grey">Permission</a></li>
+                                       
+                    </ul>
+                </li>
+
+
+               
+             
+                 
+            </ul>
+        </nav>
+        <!-- End Sidebar navigation -->
+    </div>
+    <!-- End Sidebar scroll-->
+</aside>
+
+
+<!-- ============================================================== -->
+<!-- End Left Sidebar - style you can find in sidebar.scss  -->
+<!-- ============================================================== -->

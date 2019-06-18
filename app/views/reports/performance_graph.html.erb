@@ -1,0 +1,505 @@
+<%
+#[['Text', Value], ['Text', Value]]
+school_year=[]                        
+(2017..2019).each do |i|
+    school_year.push([i.to_s+'-'+(i+1).to_s,i.to_s+'-'+(i+1).to_s])
+end
+
+grade=[]
+(1..12).each do |i|
+    grade.push(i.to_s)
+end
+
+%>
+
+<%= form_for(@student_filter, :url=> reports_performance_graph_path, :html => { :method => 'GET' }) do |f| %> 
+        
+<div class="card">
+    <div class="card-body">
+        <h4 class="card-title" style="color:brown;">Student's Performance (Graph)</h4>
+        <hr class="m-t-0 m-b-40"> 
+
+        <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label class="control-label text-left col-md-4">School Year</label>
+                        <div class="col-md-8">
+                        <%= f.select :school_year, options_for_select(school_year,:selected => @school_year), {include_blank: '-- Select One --'}, {class: 'form-control'}%>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label class="control-label text-left col-md-4">School Name</label>
+                        <div class="col-md-8">
+                        <%= f.collection_select :school_id, School.order(:school_name),:id ,:school_name, { include_blank: '-- Select One --' }, { class: "form-control" } %>
+                        </div>
+                    </div>
+                </div>
+        </div>
+
+        <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group row">
+                        <label class="control-label text-left col-md-2">Student Name</label>
+                        <div class="col-md-10">
+
+
+                        <%= f.collection_select :student_id, Student.reorder(student_name: :asc),:id ,:student_name, { include_blank: '-- Select One --' }, { class: "form-control",:required => true } %>
+
+
+                        </div>
+                    </div>
+                </div>
+
+        </div>
+
+
+ 
+
+ <!--begin block student information show and hide when user change selectbox student name -->
+
+ <div id="container_student">
+                <hr class="m-t-0 m-b-40">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <label class="control-label text-left col-md-4">Student Id</label>
+                            <div class="col-md-8">
+
+                                <fieldset disabled="">                     
+                                    <input type="text" id="txt_student_id" class="form-control">
+                                </fieldset>
+
+                            </div>
+                        </div>
+                    </div>
+
+        <!--Sex -->
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <label class="control-label text-left col-md-4">Grade</label>
+                            <div class="col-md-8">
+
+
+                            <fieldset disabled="">                     
+                                <input type="text" id="txt_grade" class="form-control">
+                            </fieldset>
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label class="control-label text-left col-md-4">Sex</label>
+                        <div class="col-md-8">
+
+                            <fieldset disabled="">                     
+                                <input type="text" id="txt_sex" class="form-control">
+                            </fieldset>
+
+                        </div>
+                    </div>
+                </div>
+
+        <!--Date birth -->
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label class="control-label text-left col-md-4">Date birth</label>
+                        <div class="col-md-8">
+
+
+                        <fieldset disabled="">                     
+                            <input type="text" id="txt_date_birth" class="form-control">
+                        </fieldset>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        <!-- Total Score -->
+            <div class="row">
+            <div class="col-md-6">
+                <div class="form-group row">
+                    <label class="control-label text-left col-md-4">Total Score both Semester is</label>
+                    <div class="col-md-8">
+
+                        <fieldset disabled="">                     
+                            <input type="text" id="txt_totalscore" class="form-control">
+                        </fieldset>
+
+                    </div>
+                </div>
+            </div>
+
+        <!--Study Result -->
+            <div class="col-md-6">
+                <div class="form-group row">
+                    <label class="control-label text-left col-md-4">Study Result</label>
+                    <div class="col-md-8">
+
+
+                    <fieldset disabled="">                     
+                        <input type="text" id="txt_result" class="form-control">
+                    </fieldset>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+</div> <!-- end container student -->
+
+
+    <!-- end block student information -->
+
+
+
+
+
+
+
+
+
+
+
+        
+    </div><!-- end card body-->
+</div> <!-- end card -->
+
+<% end %>
+
+
+<!-- ***************block chart ***********-->
+<div class="card" id="container_chart">
+    <div class="card-body"> 
+    <div class="row">
+            <div class="col-12">
+                
+                    
+
+
+                    <div class="col-lg-8 col-md-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="card-title">Student Score</h4>
+                            <div class="text-center">
+                                <ul class="list-inline">
+                                    <li>
+                                            <h6 class="text-muted  text-info"><i class="fa fa-circle font-10 m-r-10"></i>Math</h6> </li>
+                                    <li>
+                                        
+                                            <h6 class="text-muted text-success"><i class="fa fa-circle font-10 m-r-10 "></i>khmer</h6> </li>
+                                    <li>
+                                            <h6 class="text-muted  text-warning"><i class="fa fa-circle font-10 m-r-10"></i>Social</h6> </li>
+                                    </li>
+                                </ul>
+                            </div>
+                            
+                            <div class="amp-pxl m-t-40" style="height: 335px;"></div>
+                            
+                        </div>
+                    </div>
+                </div>
+
+
+
+            </div>
+    </div>
+    </div>
+</div>
+<!-- ***************end block chart *******-->
+
+<script>
+    $(document).ready(function(){
+
+       /* assign selectobx object to variable */
+       var obj_year=$("select[id=student_performance_school_year]");
+       var obj_school=$("select[id=student_performance_school_id]");
+       var obj_student=$("select[id=student_performance_student_id]");
+     
+       /* register event change for selectbox school year */
+       obj_year.on('change', function (e) {
+                var school_year = $(this).val();
+                getStudentInformation(school_year,obj_school.val());
+                });
+
+
+        /* register event change for selectbox shool name */
+        obj_school.on('change', function (e) {
+                    var school_id = $(this).val();
+                  
+                    getStudentName(obj_year.val(),school_id)
+                    
+                    });                            
+
+        /* register event change for selectbox student name 
+           when user select student name select box it will call to ajax
+        */
+        obj_student.on('change', function (e) {
+                    var id = $(this).val();
+                    getStudentInformation(obj_year.val(),id);
+                   
+        }); 
+                    
+        /* this function is called when user select shool name select box */            
+        function getStudentName(school_year,school_id)
+        {
+            obj_student.empty();
+            url='http://localhost:3000/api/v1/students/get_student?school_year='+school_year+ '&school_id='+school_id        
+            $.ajax({
+                url: url,
+                type:"GET",
+                dataType:"json",
+                beforeSend: function(){
+                   // $('#loader').css("visibility", "visible");
+                },
+                success:function(data) {
+                obj_student.append('<option selected value="">' + '--Select One--' + '</option>');                
+                /* display student information */
+                if(data.status=="SUCCESS"){
+                    data=data.data; //get data from result of api
+                    $.each(data, function(key, value){ 
+                          obj_student.append('<option value="'+ value.student_id +'">' + value.student_name + '</option>');            
+                     });
+                }
+
+                },
+                complete: function(){
+                   // $('#loader').css("visibility", "hidden");
+                   clearStudentInfo();
+                }
+            });            
+        }
+
+
+        /* this function is called when user select on student name */
+        function getStudentInformation(school_year,id_student)
+        {
+
+            var math_s1=0;
+            var math_s2=0;
+            var khmer_s1=0;
+            var khmer_s2=0;
+            var social_s1=0;
+            var social_s2=0;
+           
+            url='http://localhost:3000/api/v1/students?school_year='+school_year+ '&student_id='+id_student        
+            $.ajax({
+                url: url,
+                type:"GET",
+                dataType:"json",
+                beforeSend: function(){
+                   // $('#loader').css("visibility", "visible");
+                },
+                success:function(data) {
+                
+                /* display student information */
+                if(data.status=="SUCCESS"){
+                        $("container_student").show(100);
+                        data=data.data[0]; //get data from result of api
+                        $('input[id="txt_student_id"]').attr("value",data.student_id);
+                        $('input[id="txt_grade"]').attr("value",data.grade);
+                        $('input[id="txt_sex"]').attr("value",data.sex);
+                        $('input[id="txt_date_birth"]').attr("value",data.date_of_birth);
+                       
+
+                        avg_semester=parseFloat(data.avg_semester);
+                        total_semester=parseFloat(data.total_semester);
+                        result=((avg_semester/total_semester)*100)>60 ? "Pass" : "Fail";
+                        $('input[id="txt_totalscore"]').attr("value","Avg.Score : " + avg_semester + " / Total Score : " + total_semester);
+                        $('input[id="txt_result"]').attr("value",result);
+
+                        math_s1=parseFloat(data.math_s1);
+                        math_s2=parseFloat(data.math_s2);
+                        khmer_s1=parseFloat(data.khmer_s1);
+                        khmer_s2=parseFloat(data.khmer_s2);
+                        social_s1=parseFloat(data.social_s1);
+                        social_s2=parseFloat(data.social_s2);
+                       
+
+                    }
+
+                    else
+                        clearStudentInfo();
+
+                },
+                complete: function(){
+                   /* display chart */
+                   displayChart(math_s1,math_s2,khmer_s1,khmer_s2,social_s1,social_s2);
+                }
+            });  
+        }
+
+    })
+
+
+    function clearStudentInfo()
+    {
+        $('input[id="txt_student_id"]').attr("value","");
+        $('input[id="txt_grade"]').attr("value","");
+        $('input[id="txt_sex"]').attr("value","");
+        $('input[id="txt_date_birth"]').attr("value","");
+        $('input[id="txt_totalscore"]').attr("value","");
+        $('input[id="txt_result"]').attr("value","");
+    }
+</script>
+
+
+<!-- chartist chart -->
+<script src="/assets/chartist-js/dist/chartist.min.js"></script>
+<script src="/assets/chartist-plugin-tooltip-master/dist/chartist-plugin-tooltip.min.js"></script>
+<script src="js/dashboard3.js"></script>
+
+<script>
+function displayChart(math_s1,math_s2,khmer_s1,khmer_s2,social_s1,social_s2) {
+    "use strict";
+    var chart = new Chartist.Bar('.amp-pxl', {
+          labels: ['Semester 1', 'Semester 2'],
+          series: [
+            [math_s1, math_s2],
+            [khmer_s1, khmer_s2],
+            [social_s1, social_s2],
+
+          ]
+        }, {
+          axisX: {
+            // On the x-axis start means top and end means bottom
+            position: 'end',
+            showGrid: false
+          },
+          axisY: {
+            // On the y-axis start means left and end means right
+            position: 'start'
+            , labelInterpolationFnc: function (value) {
+                
+                return (value);
+            }
+          },
+        high:'100',
+        low: '0',
+        plugins: [
+            Chartist.plugins.tooltip()
+        ]
+    });
+    
+
+        // Offset x1 a tiny amount so that the straight stroke gets a bounding box
+        // Straight lines don't get a bounding box 
+        // Last remark on -> http://www.w3.org/TR/SVG11/coords.html#ObjectBoundingBox
+        chart.on('draw', function(ctx) {  
+          if(ctx.type === 'area') {    
+            ctx.element.attr({
+              x1: ctx.x1 + 0.001
+            });
+          }
+        });
+
+        // Create the gradient definition on created event (always after chart re-render)
+        chart.on('created', function(ctx) {
+          var defs = ctx.svg.elem('defs');
+          defs.elem('linearGradient', {
+            id: 'gradient',
+            x1: 0,
+            y1: 1,
+            x2: 0,
+            y2: 0
+          }).elem('stop', {
+            offset: 0,
+            'stop-color': 'rgba(255, 255, 255, 1)'
+          }).parent().elem('stop', {
+            offset: 1,
+            'stop-color': 'rgba(38, 198, 218, 1)'
+          });
+        });
+    
+            
+    var chart = [chart];
+
+    // ============================================================== 
+    // This is for the animation
+    // ==============================================================
+    
+    for (var i = 0; i < chart.length; i++) {
+        chart[i].on('draw', function(data) {
+            if (data.type === 'line' || data.type === 'area') {
+                data.element.animate({
+                    d: {
+                        begin: 500 * data.index,
+                        dur: 500,
+                        from: data.path.clone().scale(1, 0).translate(0, data.chartRect.height()).stringify(),
+                        to: data.path.clone().stringify(),
+                        easing: Chartist.Svg.Easing.easeInOutElastic
+                    }
+                });
+            }
+            if (data.type === 'bar') {
+                data.element.animate({
+                    y2: {
+                        dur: 500,
+                        from: data.y1,
+                        to: data.y2,
+                        easing: Chartist.Svg.Easing.easeInOutElastic
+                    },
+                    opacity: {
+                        dur: 500,
+                        from: 0,
+                        to: 1,
+                        easing: Chartist.Svg.Easing.easeInOutElastic
+                    }
+                });
+            }
+        });
+    }
+    
+    
+    // ============================================================== 
+    // Download count
+    // ============================================================== 
+    var sparklineLogin = function () {
+        $('.spark-count').sparkline([4, 5, 0, 10, 9, 12, 4, 9, 4, 5, 3, 10, 9, 12, 10, 9, 12, 4, 9], {
+            type: 'bar'
+            , width: '100%'
+            , height: '70'
+            , barWidth: '2'
+            , resize: true
+            , barSpacing: '6'
+            , barColor: 'rgba(255, 255, 255, 0.3)'
+        });
+    }
+    var sparkResize;
+    
+    sparklineLogin(); 
+}        
+ 
+
+
+ // ============================================================== 
+    // icons
+    // ==============================================================  
+   var icons = new Skycons({"color": "#1976d2"}),
+          list  = [
+            "clear-day", "clear-night", "partly-cloudy-day",
+            "partly-cloudy-night", "cloudy", "rain", "sleet", "snow", "wind",
+            "fog"
+          ],
+          i;
+    for(i = list.length; i--; ) {
+        var weatherType = list[i],
+            elements = document.getElementsByClassName( weatherType );
+        for (e = elements.length; e--;){
+            icons.set( elements[e], weatherType );
+        }
+    } 
+     icons.play();
+  
+</script>
+

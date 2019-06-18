@@ -1,0 +1,172 @@
+<%
+#[['Text', Value], ['Text', Value]]
+school_year=[]                        
+(2017..2019).each do |i|
+    school_year.push([i.to_s+'-'+(i+1).to_s,i.to_s+'-'+(i+1).to_s])
+end
+
+grade=[]
+(1..12).each do |i|
+    grade.push(i.to_s)
+end
+
+%>
+
+<%= form_for(@student_filter, :url=> student_performances_path, :html => { :method => 'GET' }) do |f| %> 
+        
+<div class="card">
+    <div class="card-body">
+        <h4 class="card-title" style="color:brown;">Student Performance Information</h4>
+        <hr class="m-t-0 m-b-40"> 
+
+        <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label class="control-label text-left col-md-4">School Year</label>
+                        <div class="col-md-8">
+                        <%= f.select :school_year, options_for_select(school_year,:selected => @school_year), {include_blank: '-- Select One --'}, {class: 'form-control'}%>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label class="control-label text-left col-md-4">School Name</label>
+                        <div class="col-md-8">
+                        <%= f.collection_select :school_id, School.order(:school_name),:id ,:school_name, { include_blank: '-- Select One --' }, { class: "form-control" } %>
+                        </div>
+                    </div>
+                </div>
+        </div>
+
+        <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label class="control-label text-left col-md-4">Grade</label>
+                        <div class="col-md-8">
+                        <%= f.select :grade, options_for_select(grade,:selected =>@grade), {include_blank: '-- Select One --'}, {class: 'form-control'}%>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label class="control-label text-left col-md-4">Student Name</label>
+                        <div class="col-md-8">
+                        <%=f.text_field :student_name , {class: 'form-control',value:@student_name} %>
+                        </div>
+                    </div>
+                </div>
+        </div>
+
+
+
+
+
+
+        <hr class="m-t-0 m-b-40">
+
+        <div class="container text-center">              
+                <div class="row button-group">              
+                        <div class="col-lg-2 col-md-3 col-sm-4">    
+                            
+
+
+                            <%= button_tag(:type => 'submit', :class => "btn btn-block btn-outline-success btn-rounded" ) do %>
+                                <i class="fa fa-search-plus">&nbsp;</i>Find
+                            <% end %>
+
+                        </div>
+        
+                        <div class="col-lg-2 col-md-3 col-sm-4">
+                            
+                                <%= button_tag(:type => 'button', :class => "btn btn-block btn-outline-success btn-rounded", :onclick => "javascript:location.href='#{new_student_performance_path()}'"    ) do %>
+                                    <i class="fa fa-file-o"> &nbsp;</i> New Student
+                                <% end %>
+
+
+                        </div>
+                </div>
+                
+
+        </div>
+
+        
+    </div><!-- end card body-->
+</div> <!-- end card -->
+
+<% end %>
+
+
+
+<div class="card">
+<div class="card-body"> 
+  <div class="row">
+          <div class="col-12">
+              
+                  <div class="table-responsive m-t-40">
+                          <table id="example23" class="display nowrap table table-hover table-striped table-bordered" cellspacing="0" width="100%">
+                              <thead>
+                                  <tr>
+                                      <th>No. </th>
+                                      <th>School Year</th>
+                                      <th>School Name</th>
+                                      <th>Grade</th>
+                                      <th>Student Name</th>
+                                      <th>Score S1</th>
+                                      <th>Avg. S1</th>
+                                      <th>Score S2</th>   
+                                      <th>Avg. S2</th>                                   
+                                      <th>Action</th>
+                                  </tr>
+                              </thead>
+
+                              <tbody>
+                              
+                                <% i=0 %>
+                                <%@student_performance.each do |student_performance| %>
+                                    <%i=i+1%>
+                                    <%
+                                    total_scoreS1=student_performance.math_s1+student_performance.khmer_s1+student_performance.social_s1
+                                    avg_scoreS1=total_scoreS1/3
+
+                                    total_scoreS2=student_performance.math_s2+student_performance.khmer_s2+student_performance.social_s2
+                                    avg_scoreS2=total_scoreS2/3
+
+                                    %>
+                                    <tr>
+                                    <td><%=i%></td>
+                                    <td><%=student_performance.school_year%></td>
+                                    <td><%=student_performance.school.school_name%></td>
+                                    <td align="center"><%=student_performance.grade%></td> 
+                                    <td><%=student_performance.student.student_name%></td>
+                                    <td><%=total_scoreS1%></td>
+                                    <td><%=avg_scoreS1%></td>
+                                    <td><%=total_scoreS2%></td>
+                                    <td><%=avg_scoreS2%></td>
+                                    <td>
+                                    <!-- Example single danger button -->
+                                    <div class="btn-group">
+                                            <button type="button" class="btn btn-sm btn-rounded btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                <i class="ti-settings"></i>
+                                            </button>
+                                            <div class="dropdown-menu">
+                                               
+                                                <%= link_to 'Delete', student_path(student_performance), class:'dropdown-item' %>
+                                                <%= link_to 'Edit', edit_student_performance_path(student_performance), class:'dropdown-item' %>
+                                                
+       
+                                               
+                                            </div>
+                                        </div>
+
+                                    </td>
+                                </tr>   
+
+                                <%end%>   
+
+                               </tbody>
+                          </table>
+                      </div>
+          </div>
+  </div>
+</div>
+</div>

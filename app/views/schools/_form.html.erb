@@ -1,0 +1,74 @@
+<%=form_for @school do |f| %>
+    
+    <div class="card">
+    <div class="card-body">
+        <h4 class="card-title" style="color:brown;">School information</h4>
+        <hr class="m-t-0 m-b-40"> 
+    
+        <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label class="control-label text-left col-md-4">School Code</label>
+                        <div class="col-md-8">
+                            
+                            <%=f.text_field :school_code , {class: 'form-control',required: true}%>
+    
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label class="control-label text-left col-md-4">School Name</label>
+                        <div class="col-md-8">
+                        <%=f.text_field :school_name , {class: 'form-control'}%>
+                        </div>
+                    </div>
+                </div>
+        </div>
+    
+
+    
+      
+        <hr class="m-t-0 m-b-40">
+    
+        <div class="container text-center">              
+                <div class="row button-group">    
+                
+                    <div class="col-lg-2 col-md-3 col-sm-4">
+                       
+                       <%= button_tag( :class => "btn btn-block btn-outline-success btn-rounded") do %>
+                            <i class="fa fa-file-o"></i> <%=@caption_button_school%>
+                        <% end %>
+                    </div>
+
+                    <% if @caption_button_school=='Update' %>
+                        <div class="col-lg-2 col-md-3 col-sm-4">
+                        
+                            <%= button_tag(:type => 'button', :class => "btn btn-block btn-outline-success btn-rounded", :onclick => "javascript:location.href='#{new_school_path()}'"    ) do %>
+                                <i class="fa fa-file-o"> &nbsp;</i> New School
+                            <% end %>
+
+
+                        </div>
+                    <%end%>
+
+
+                    <div class="col-lg-2 col-md-3 col-sm-4">   
+                                          
+                            <%= button_tag(:type => 'button', :class => "btn btn-block btn-outline-success btn-rounded", :onclick => "javascript:location.href='#{schools_path()}'"    ) do %>
+                                <i class="fa fa-search-plus"></i> Go Find
+                            <% end %>
+                     </div>
+        
+    
+                </div>
+                
+    
+        </div>
+    
+        
+     </div><!-- end card body-->
+    </div> <!-- end card -->
+    
+    
+    <%end%>

@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  student_id: MyString
+  student_name: MyString
+  sex: MyString
+  date_of_birth: 2019-06-15
+
+two:
+  student_id: MyString
+  student_name: MyString
+  sex: MyString
+  date_of_birth: 2019-06-15
